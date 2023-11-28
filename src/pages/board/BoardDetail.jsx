@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import AxiosApi from "../../api/AxiosApi";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { timeFromNow } from "../../utils/Common";
+import Common from "../../utils/Common";
 
 // 여기에 스타일드 컴포넌트를 정의합니다.
 const Container = styled.div`
@@ -150,7 +150,7 @@ const BoardDetail = () => {
       />
       <Title>{board.title}</Title>
       <Content>{board.content}</Content>
-      <BoardDate>{timeFromNow(board.regDate)}</BoardDate>
+      <BoardDate>{Common.timeFromNow(board.regDate)}</BoardDate>
 
       <button onClick={toggleComments}>
         {showComments ? "댓글 숨기기" : `댓글 ${comments.length}개 보기`}
@@ -173,7 +173,7 @@ const BoardDetail = () => {
               <CommentItem key={comment.commentId}>
                 <CommentEmail>
                   <p>{comment.email}</p>
-                  <p>{timeFromNow(comment.regDate)}</p>
+                  <p>{Common.timeFromNow(comment.regDate)}</p>
                 </CommentEmail>
                 <CommentContent>{comment.content}</CommentContent>
               </CommentItem>

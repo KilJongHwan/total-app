@@ -61,14 +61,18 @@ const Login = () => {
   };
   const onClickLogin = async () => {
     //로그인을 위한 axios 호출
-    const res = await AxiosApi.memberLogin(inputEmail, inputPw);
-    console.log(res.data);
-    if (res.data === true) {
-      window.localStorage.setItem("email", inputEmail); // 브라우저에서 임시로 값을 저장하는 기술
-      window.localStorage.setItem("userPw", inputPw);
-      window.localStorage.setItem("isLogin", "TRUE");
-      navigate("/home");
-    } else {
+    try {
+      const res = await AxiosApi.memberLogin(inputEmail, inputPw);
+      console.log(res.data);
+      if (res.data.grantType === "Bearer") {
+        localStorage.setItem("token", res.data.accessToken);
+        navigate("/home");
+      } else {
+        setModalOpen(true);
+        setModalContent("아이디 및 패스워드를 재확인해 주세요.^^");
+      }
+    } catch (err) {
+      console.log(err);
       setModalOpen(true);
       setModalContent("아이디 및 패스워드를 재확인해 주세요.^^");
     }

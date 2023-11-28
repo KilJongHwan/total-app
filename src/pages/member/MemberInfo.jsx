@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import AxiosApi from "../../api/AxiosApi";
-import { formatDate } from "../../utils/Common";
+import Common from "../../utils/Common";
 import { storage } from "../../api/firebase";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserStore";
@@ -158,7 +158,7 @@ const MemberInfo = () => {
             <Label>Email : {member.email}</Label>
           </Field>
           <Field>
-            <Label>가입일 : {formatDate(member.regDate)}</Label>
+            <Label>가입일 : {Common.formatDate(member.regDate)}</Label>
           </Field>
           {/* 현재 사용자가 로그인한 사용자인 경우에만 편집 버튼 표시 */}
           {isCurrentUser && (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AxiosApi from "../../api/AxiosApi";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { formatDate } from "../../utils/Common";
+import Common from "../../utils/Common";
 
 const ChatListContainer = styled.div`
   padding: 30px;
@@ -99,7 +99,10 @@ function ChatList() {
         console.log(error);
       }
     };
-    getChatRoom();
+    const intervalID = setInterval(getChatRoom, 1000);
+    return () => {
+      clearInterval(intervalID);
+    };
   }, []);
 
   const enterChatRoom = (roomId) => {
@@ -122,7 +125,7 @@ function ChatList() {
             onClick={() => enterChatRoom(room.roomId)}
           >
             <ChatName>{room.name}</ChatName>
-            <ChatDate>{formatDate(room.regDate)}</ChatDate>
+            <ChatDate>{Common.formatDate(room.regDate)}</ChatDate>
           </ChatRoom>
         ))}
       </ChatUl>

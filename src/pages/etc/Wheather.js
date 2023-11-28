@@ -46,6 +46,50 @@ const Wheather = () => {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
   }, []);
+  useEffect(() => {
+    const getGeolocationAndWeather = async () => {
+      try {
+        // 위치 정보 가져오기
+        const { coords } = await new Promise((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject)
+        );
+
+        // 카카오 API를 통해 주소 정보 가져오기
+        const { data } = await axios.get(
+          `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${coords.longitude}&y=${coords.latitude}`,
+          {
+            headers: {
+              Authorization: `KakaoAK 2dda918f299fb6e8325412499bf9a08a`,
+            },
+          }
+        );
+
+        const address = data.documents[0].address.address_name;
+
+        // 좌표 변환
+        const convertedCoords = dfs_xy_conv(
+          "toXY",
+          coords.latitude,
+          coords.longitude
+        );
+
+        // 날씨 정보 가져오기
+        const { data: weatherData } = await axios.get(
+          `http://127.0.0.1:5000/api/weather2?x=${convertedCoords.x}&y=${convertedCoords.y}`
+        );
+
+        // 상태 업데이트
+        setLocation({ lat: coords.latitude, long: coords.longitude });
+        setAddress(address);
+        setCoords(convertedCoords);
+        setWeather(weatherData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getGeolocationAndWeather();
+  }, []);
 
   useEffect(() => {
     console.log(location.lat, location.long);

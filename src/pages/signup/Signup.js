@@ -80,21 +80,26 @@ const Signup = () => {
 
   // 회원 가입 여부 확인
   const memberRegCheck = async (email) => {
-    const memberCheck = await AxiosApi.memberRegCheck(email);
-    console.log("가입 가능 여부 확인 : ", memberCheck.data);
-    if (memberCheck.data === true) {
-      setMailMessage("사용 가능한 이메일 입니다.");
-      setIsMail(true);
-    } else {
-      setMailMessage("중복된 이메일 입니다.");
-      setIsMail(false);
+    try {
+      const resp = await AxiosApi.memberRegCheck(email);
+      console.log("가입 가능 여부 확인 : ", resp.data);
+
+      if (resp.data === true) {
+        setMailMessage("사용 가능한 이메일 입니다.");
+        setIsMail(true);
+      } else {
+        setMailMessage("중복된 이메일 입니다.");
+        setIsMail(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const onClickLogin = async () => {
     const memberReg = await AxiosApi.memberReg(inputEmail, inputPw, inputName);
     console.log(memberReg.data);
-    if (memberReg.data === true) {
+    if (memberReg.data.email === inputEmail) {
       navigate("/");
     } else {
       setModalOpen(true);
