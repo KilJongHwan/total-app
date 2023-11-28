@@ -6,6 +6,7 @@ import Common from "../../utils/Common";
 import { storage } from "../../api/firebase";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserStore";
+import { jwtDecode } from "jwt-decode";
 
 const Container = styled.div`
   padding: 24px;
@@ -86,7 +87,11 @@ const MemberInfo = () => {
     memberInfo();
 
     // 로컬스토리지에서 로그인한 사용자 정보를 가져옵니다.
-    const loginUserEmail = localStorage.getItem("email");
+    // const loginUserEmail = localStorage.getItem("email");
+    const token = localStorage.getItem("token");
+    const decodedToken = jwtDecode(token);
+    console.log(decodedToken.email);
+    const loginUserEmail = decodedToken.email;
     // 로그인한 사용자와 글쓴이가 같은지 비교합니다.
     if (loginUserEmail === email) {
       setIsCurrentUser(true);

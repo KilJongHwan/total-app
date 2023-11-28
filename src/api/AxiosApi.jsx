@@ -230,5 +230,19 @@ const AxiosApi = {
       },
     });
   },
+  // 새로운 액세스 토큰을 요청하는 함수
+  refreshToken: async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    return await axios.post(
+      KH_DOMAIN + "/auth/refresh",
+      { refreshToken },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + refreshToken,
+        },
+      }
+    );
+  },
 };
 export default AxiosApi;

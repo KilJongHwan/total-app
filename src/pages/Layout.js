@@ -20,6 +20,7 @@ import { BiCameraMovie } from "react-icons/bi";
 import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../api/AxiosApi";
+import { jwtDecode } from "jwt-decode";
 
 // 사이드바 메뉴를 구성 합니다.
 
@@ -28,7 +29,9 @@ const Layout = () => {
   const { color, name } = context;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const email = localStorage.getItem("email");
+  const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
+  // const email = localStorage.getItem("email");
   const [member, setMember] = useState({});
 
   const onClickLeft = () => {
@@ -41,7 +44,8 @@ const Layout = () => {
   useEffect(() => {
     const getMember = async () => {
       try {
-        const rsp = await AxiosApi.memberGetOne(email);
+        console.log(decodedToken);
+        const rsp = await AxiosApi.memberGetOne(decodedToken.sub);
         setMember(rsp.data);
       } catch (e) {
         console.error(e);

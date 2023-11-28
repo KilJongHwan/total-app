@@ -66,6 +66,7 @@ const Login = () => {
       console.log(res.data);
       if (res.data.grantType === "Bearer") {
         localStorage.setItem("token", res.data.accessToken);
+        // localStorage.setItem("email", inputEmail);
         navigate("/home");
       } else {
         setModalOpen(true);

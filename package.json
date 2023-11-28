@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.2.1",
     "axios": "^1.6.2",
     "firebase": "^10.7.0-20231122201901",
+    "jwt-decode": "^4.0.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-calendar": "^4.6.1",
