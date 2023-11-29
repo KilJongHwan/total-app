@@ -51,6 +51,10 @@ const Common = {
       );
       console.log(res.data);
       Common.setAccessToken(res.data);
+      if (res.status === 403) {
+        // 리프레시 토큰이 만료되었을 경우
+        throw new Error("리프레쉬 토큰이 만료되었습니다.");
+      }
       if (res.data) {
         Common.setAccessToken(res.data);
         return res.data;

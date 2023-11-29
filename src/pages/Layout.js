@@ -47,11 +47,6 @@ const Layout = () => {
         const rsp = await AxiosApi.memberGetOne(decodedToken.sub);
         if (rsp.status === 200) setMember(rsp.data);
       } catch (e) {
-        // if (e.response.status === 401) {
-        //   await Common.handleUnauthorized();
-        //   alert("토큰이 만료되었습니다.");
-        //   navigate("/");
-        // }
         console.error(e);
       }
     };

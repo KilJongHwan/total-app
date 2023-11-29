@@ -13,13 +13,14 @@ Interceptor.interceptors.response.use(
       originalRequest._retry = true;
       const refreshToken = localStorage.getItem("refreshToken");
       if (refreshToken && refreshToken !== "") {
-        try {
-          const newAccessToken = await Common.handleUnauthorized();
+        const newAccessToken = await Common.handleUnauthorized();
+        if (newAccessToken) {
           localStorage.setItem("accessToken", newAccessToken);
           Interceptor.defaults.headers.common["Authorization"] =
             "Bearer " + newAccessToken;
           return Interceptor(originalRequest);
-        } catch (err) {
+        } else {
+          // 리프레시 토큰이 만료되었을 경우
           alert("토큰이 만료되었습니다.");
           window.location.href = "/";
         }
