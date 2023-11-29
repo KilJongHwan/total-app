@@ -4,10 +4,12 @@ import CateInsert from "../../component/category/CateInsert";
 import TodoList from "../../component/category/CateList";
 import AxiosApi from "../../api/AxiosApi";
 import Modal from "../../utils/Modal";
+import { jwtDecode } from "jwt-decode";
 
 const Category = () => {
   const [todos, setTodos] = useState([]);
-  const email = window.localStorage.getItem("email");
+  const token = localStorage.getItem("accessToken");
+  const decodedToken = jwtDecode(token);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modlaMessage, setModalMessage] = useState("");
@@ -25,8 +27,8 @@ const Category = () => {
   }, []);
 
   const onInsert = async (text) => {
-    console.log("onInsert : " + text + " " + email);
-    const rsp = await AxiosApi.cateInsert(email, text);
+    console.log("onInsert : " + text + " " + decodedToken.sub);
+    const rsp = await AxiosApi.cateInsert(decodedToken.sub, text);
     if (rsp.data === true) {
       const rsp = await AxiosApi.cateList();
       if (rsp.status === 200) setTodos(rsp.data);

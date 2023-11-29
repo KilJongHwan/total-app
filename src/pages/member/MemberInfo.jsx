@@ -6,7 +6,6 @@ import Common from "../../utils/Common";
 import { storage } from "../../api/firebase";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserStore";
-import { jwtDecode } from "jwt-decode";
 
 const Container = styled.div`
   padding: 24px;
@@ -77,21 +76,32 @@ const MemberInfo = () => {
   const { setName } = context;
 
   useEffect(() => {
+    const accessToken = Common.getAccessToken();
     const memberInfo = async () => {
-      const rsp = await AxiosApi.memberGetOne(email);
-      if (rsp.status === 200) {
-        setMember(rsp.data);
-        setUrl(rsp.data.image);
+      try {
+        const rsp = await AxiosApi.memberGetOne(email);
+        if (rsp.status === 200) {
+          setMember(rsp.data);
+          setUrl(rsp.data.image);
+        }
+      } catch (error) {
+        if (error.response.status === 401) {
+          await Common.handleUnauthorized();
+          const newToken = Common.getAccessToken();
+          if (newToken !== accessToken) {
+            const rsp = await AxiosApi.memberGetOne(email);
+            if (rsp.status === 200) {
+              setMember(rsp.data);
+              setUrl(rsp.data.image);
+            }
+          }
+        }
       }
     };
     memberInfo();
 
     // 로컬스토리지에서 로그인한 사용자 정보를 가져옵니다.
-    // const loginUserEmail = localStorage.getItem("email");
-    const token = localStorage.getItem("token");
-    const decodedToken = jwtDecode(token);
-    console.log(decodedToken.email);
-    const loginUserEmail = decodedToken.email;
+    const loginUserEmail = localStorage.getItem("email");
     // 로그인한 사용자와 글쓴이가 같은지 비교합니다.
     if (loginUserEmail === email) {
       setIsCurrentUser(true);
@@ -109,15 +119,35 @@ const MemberInfo = () => {
 
   // 회원 정보 업데이트 Axios 호출
   const handleSubmit = async (e) => {
+    const accessToken = Common.getAccessToken();
     e.preventDefault();
-    const rsp = await AxiosApi.memberUpdate(email, editName, url);
-    if (rsp.status === 200) {
-      setEditMode(false);
-      setName(editName);
-      const rsp = await AxiosApi.memberGetOne(email);
+    try {
+      const rsp = await AxiosApi.memberUpdate(email, editName, url);
       if (rsp.status === 200) {
-        setMember(rsp.data);
-        setUrl(rsp.data.image);
+        setEditMode(false);
+        setName(editName);
+        const rsp = await AxiosApi.memberGetOne(email);
+        if (rsp.status === 200) {
+          setMember(rsp.data);
+          setUrl(rsp.data.image);
+        }
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        await Common.handleUnauthorized();
+        const newToken = Common.getAccessToken();
+        if (newToken !== accessToken) {
+          const rsp = await AxiosApi.memberUpdate(email, editName, url);
+          if (rsp.status === 200) {
+            setEditMode(false);
+            setName(editName);
+            const rsp = await AxiosApi.memberGetOne(email);
+            if (rsp.status === 200) {
+              setMember(rsp.data);
+              setUrl(rsp.data.image);
+            }
+          }
+        }
       }
     }
   };

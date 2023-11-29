@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { KH_SOCKET_URL } from "../../utils/Common";
+import Common from "../../utils/Common";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AxiosApi from "../../api/AxiosApi";
@@ -79,24 +79,26 @@ const CloseButton = styled.button`
 const Chatting = () => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [inputMsg, setInputMsg] = useState("");
-  const [roomName, setRoomName] = useState(""); // 채팅방 이름
   const [chatList, setChatList] = useState([]);
   const { roomId } = useParams();
+  const [sender, setSender] = useState("");
+  const [roomName, setRoomName] = useState(""); // 채팅방 이름
   const ws = useRef(null);
   const navigate = useNavigate(); // useNavigate 훅 추가
   const email = window.localStorage.getItem("email");
-  const [sender, setSender] = useState("");
 
   const onChangMsg = (e) => {
     setInputMsg(e.target.value);
   };
 
   const onEnterKey = (e) => {
-    if (e.key === "Enter") onClickMsgSend(e);
+    if (e.key === "Enter" && inputMsg.trim() !== "") {
+      e.preventDefault();
+      onClickMsgSend(e);
+    }
   };
 
   const onClickMsgSend = (e) => {
-    e.preventDefault();
     ws.current.send(
       JSON.stringify({
         type: "TALK",
@@ -119,7 +121,6 @@ const Chatting = () => {
     ws.current.close();
     navigate("/Chat");
   };
-
   // 이전 채팅 내용을 가져오는 함수
   const loadPreviousChat = async () => {
     try {
@@ -130,6 +131,7 @@ const Chatting = () => {
       console.error("Failed to load previous chat:", error);
     }
   };
+
   useEffect(() => {
     // 이메일로 회원 정보 가져 오기
     const getMember = async () => {
@@ -149,21 +151,21 @@ const Chatting = () => {
     const getChatRoom = async () => {
       try {
         const rsp = await AxiosApi.chatDetail(roomId);
-        setRoomName(rsp.data.name);
         console.log(rsp.data.name);
+        setRoomName(rsp.data.name);
       } catch (error) {
         console.log(error);
       }
     };
     getChatRoom();
-  }, [email]);
+  });
 
   useEffect(() => {
     console.log("방번호 : " + roomId);
     if (!ws.current) {
-      ws.current = new WebSocket(KH_SOCKET_URL);
+      ws.current = new WebSocket(Common.KH_SOCKET_URL);
       ws.current.onopen = () => {
-        console.log("connected to " + KH_SOCKET_URL);
+        console.log("connected to " + Common.KH_SOCKET_URL);
         setSocketConnected(true);
       };
     }

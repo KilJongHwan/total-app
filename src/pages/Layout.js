@@ -21,7 +21,7 @@ import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../api/AxiosApi";
 import { jwtDecode } from "jwt-decode";
-
+import Common from "../utils/Common";
 // 사이드바 메뉴를 구성 합니다.
 
 const Layout = () => {
@@ -29,9 +29,8 @@ const Layout = () => {
   const { color, name } = context;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("accessToken");
   const decodedToken = jwtDecode(token);
-  // const email = localStorage.getItem("email");
   const [member, setMember] = useState({});
 
   const onClickLeft = () => {
@@ -46,8 +45,13 @@ const Layout = () => {
       try {
         console.log(decodedToken);
         const rsp = await AxiosApi.memberGetOne(decodedToken.sub);
-        setMember(rsp.data);
+        if (rsp.status === 200) setMember(rsp.data);
       } catch (e) {
+        // if (e.response.status === 401) {
+        //   await Common.handleUnauthorized();
+        //   alert("토큰이 만료되었습니다.");
+        //   navigate("/");
+        // }
         console.error(e);
       }
     };

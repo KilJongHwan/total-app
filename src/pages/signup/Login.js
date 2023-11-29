@@ -9,6 +9,7 @@ import {
   Container,
   Items,
 } from "../../component/signup/LoginComponent";
+import Common from "../../utils/Common";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -65,8 +66,10 @@ const Login = () => {
       const res = await AxiosApi.memberLogin(inputEmail, inputPw);
       console.log(res.data);
       if (res.data.grantType === "Bearer") {
-        localStorage.setItem("token", res.data.accessToken);
-        // localStorage.setItem("email", inputEmail);
+        console.log("accessToken : ", res.data.accessToken);
+        console.log("refreshToken : ", res.data.refreshToken);
+        Common.setAccessToken(res.data.accessToken);
+        Common.setRefreshToken(res.data.refreshToken);
         navigate("/home");
       } else {
         setModalOpen(true);
