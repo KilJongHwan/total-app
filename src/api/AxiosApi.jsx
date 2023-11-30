@@ -206,6 +206,9 @@ const AxiosApi = {
       Common.KH_DOMAIN + `/movies/list/page?page=${page}&size=${size}`
     );
   },
+  movieDeleteAll: async () => {
+    return await axios.delete(Common.KH_DOMAIN + "/movies/delete");
+  },
   // 채팅방 목록 보기
   chatList: async () => {
     const accessToken = Common.getAccessToken();

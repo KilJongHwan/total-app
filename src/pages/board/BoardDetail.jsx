@@ -3,6 +3,7 @@ import AxiosApi from "../../api/AxiosApi";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Common from "../../utils/Common";
+import { jwtDecode } from "jwt-decode";
 
 // 여기에 스타일드 컴포넌트를 정의합니다.
 const Container = styled.div`
@@ -104,7 +105,8 @@ const BoardDetail = () => {
   const [comments, setComments] = useState("");
   const [inputComment, setInputComment] = useState("");
   const [comAddFlag, setComAddFlag] = useState(false); // 댓글 추가 성공 여부
-  const email = localStorage.getItem("email");
+  const token = localStorage.getItem("accessToken");
+  const decodedToken = jwtDecode(token);
   const [showComments, setShowComments] = useState(false);
 
   const toggleComments = () => {
@@ -133,7 +135,11 @@ const BoardDetail = () => {
   const handleSubmitComment = async (e) => {
     e.preventDefault();
     try {
-      const response = await AxiosApi.commentWrite(email, id, inputComment);
+      const response = await AxiosApi.commentWrite(
+        decodedToken.sub,
+        id,
+        inputComment
+      );
       console.log(response);
       setInputComment("");
       setComAddFlag(!comAddFlag);

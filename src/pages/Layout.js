@@ -21,7 +21,6 @@ import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../api/AxiosApi";
 import { jwtDecode } from "jwt-decode";
-import Common from "../utils/Common";
 // 사이드바 메뉴를 구성 합니다.
 
 const Layout = () => {

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AxiosApi from "../../api/AxiosApi";
 import styled from "styled-components";
 import { storage } from "../../api/firebase";
+import { jwtDecode } from "jwt-decode";
 
 const FormContainer = styled.div`
   padding: 20px;
@@ -136,9 +137,9 @@ const BoardWriteForm = () => {
     };
     getCategories();
   }, []);
-
-  const email = window.localStorage.getItem("email");
-  console.log("email : " + email);
+  const token = localStorage.getItem("accessToken");
+  const decodedToken = jwtDecode(token);
+  console.log("email : " + decodedToken.sub);
   const navigate = useNavigate();
 
   const handleTitleChange = (e) => {
@@ -149,10 +150,10 @@ const BoardWriteForm = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(title, content, email, url);
+    console.log(title, content, decodedToken.sub, url);
     try {
       const rsp = await AxiosApi.boardWrite(
-        email,
+        decodedToken.sub,
         title,
         selectedCategory,
         content,
