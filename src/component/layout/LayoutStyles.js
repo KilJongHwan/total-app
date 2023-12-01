@@ -113,5 +113,13 @@ export const StyledLink = styled(Link)`
 export const Dummy = styled.div`
   height: 54px;
 `;
+export const WeatherInfo = styled.p`
+  font-size: 0.8em;
+  color: #333;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+`;
 
 export default Container;

@@ -243,5 +243,15 @@ const AxiosApi = {
       },
     });
   },
+  // 이전 채팅 가져오기
+  recentChatLoad: async (roomId) => {
+    const accessToken = Common.getAccessToken();
+    return await axios.get(Common.KH_DOMAIN + `/chat/message/${roomId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+  },
 };
 export default AxiosApi;

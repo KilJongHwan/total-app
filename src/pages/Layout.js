@@ -10,6 +10,7 @@ import {
   MenuIcon,
   StyledLink,
   Dummy,
+  WeatherInfo,
 } from "../component/layout/LayoutStyles";
 import { UserContext } from "../context/UserStore";
 import { useContext, useState, useEffect } from "react";
@@ -21,6 +22,7 @@ import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import AxiosApi from "../api/AxiosApi";
 import { jwtDecode } from "jwt-decode";
+import useWeather from "../hook/useWeather";
 // 사이드바 메뉴를 구성 합니다.
 
 const Layout = () => {
@@ -31,6 +33,7 @@ const Layout = () => {
   const token = localStorage.getItem("accessToken");
   const decodedToken = jwtDecode(token);
   const [member, setMember] = useState({});
+  const { addr, temp } = useWeather();
 
   const onClickLeft = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -78,6 +81,9 @@ const Layout = () => {
               <UserIdAndName>
                 <sapn>{member.name}</sapn>
                 <span>{member.email}</span>
+                <WeatherInfo>
+                  {addr} {temp}
+                </WeatherInfo>
               </UserIdAndName>
             </UserContainer>
             <StyledMenuItem>

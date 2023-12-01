@@ -3,6 +3,7 @@ import Common from "../../utils/Common";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AxiosApi from "../../api/AxiosApi";
+import { jwtDecode } from "jwt-decode";
 
 const ChatContainer = styled.div`
   padding: 20px;
@@ -85,7 +86,8 @@ const Chatting = () => {
   const [roomName, setRoomName] = useState(""); // 채팅방 이름
   const ws = useRef(null);
   const navigate = useNavigate(); // useNavigate 훅 추가
-  const email = window.localStorage.getItem("email");
+  const token = localStorage.getItem("accessToken");
+  const decodedToken = jwtDecode(token);
 
   const onChangMsg = (e) => {
     setInputMsg(e.target.value);
@@ -136,7 +138,7 @@ const Chatting = () => {
     // 이메일로 회원 정보 가져 오기
     const getMember = async () => {
       try {
-        const rsp = await AxiosApi.memberGetOne(email);
+        const rsp = await AxiosApi.memberGetOne(decodedToken.sub);
         console.log(rsp.data.name);
         setSender(rsp.data.name);
       } catch (error) {
