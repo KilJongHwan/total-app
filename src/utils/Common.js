@@ -63,6 +63,10 @@ const Common = {
       }
     } catch (err) {
       console.log(err);
+      if (err.message === "리프레쉬 토큰이 만료되었습니다.") {
+        alert("리프레쉬 토큰이 만료되었습니다.");
+        window.location.href = "/";
+      }
       return false;
     }
   },

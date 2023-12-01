@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AxiosApi from "../../api/AxiosApi";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Common from "../../utils/Common";
+import WaveSurfer from "wavesurfer.js";
 
 const BoardContainer = styled.div`
   padding: 0 30px;
@@ -115,6 +116,36 @@ const CategorySelect = styled.select`
   width: 200px; // 드롭다운 너비 조정
 `;
 
+const Waveform = () => {
+  const waveformRef = useRef();
+  const wavesurferRef = useRef();
+
+  useEffect(() => {
+    wavesurferRef.current = WaveSurfer.create({
+      container: waveformRef.current,
+      waveColor: "black",
+      progressColor: "red",
+      responsive: true,
+    });
+
+    const url = require("./SAMPLE_1.MP3");
+    wavesurferRef.current.load(url);
+
+    return () => wavesurferRef.current.destroy();
+  }, []);
+
+  const handlePlayPause = () => {
+    const wavesurfer = wavesurferRef.current;
+    wavesurfer.playPause();
+  };
+
+  return (
+    <div>
+      <button onClick={handlePlayPause}>Play/Pause</button>
+      <div ref={waveformRef} />
+    </div>
+  );
+};
 // 게시판 목록 페이지 입니다.
 
 function BoardList() {
@@ -181,6 +212,7 @@ function BoardList() {
           </option>
         ))}
       </CategorySelect>
+      <Waveform />
       <BoardUl>
         {boardList &&
           boardList.map((board) => (
