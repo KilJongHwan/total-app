@@ -27,7 +27,7 @@ import useWeather from "../hook/useWeather";
 
 const Layout = () => {
   const context = useContext(UserContext);
-  const { color, name } = context;
+  const { color } = context;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem("accessToken");
@@ -52,8 +52,9 @@ const Layout = () => {
         console.error(e);
       }
     };
+
     getMember();
-  }, [name]);
+  }, [token]);
 
   return (
     <Container color={color}>

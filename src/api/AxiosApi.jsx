@@ -15,7 +15,7 @@ const AxiosApi = {
   //회원 전체 조회
   memberGet: async () => {
     const accessToken = Common.getAccessToken();
-    return await axios.get(Common.KH_DOMAIN + `/users/list`, {
+    return await Interceptor.get(Common.KH_DOMAIN + `/users/list`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -66,7 +66,7 @@ const AxiosApi = {
       name: name,
       image: image,
     };
-    return await axios.put(Common.KH_DOMAIN + `/users/modify`, member, {
+    return await Interceptor.put(Common.KH_DOMAIN + `/users/modify`, member, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -79,12 +79,12 @@ const AxiosApi = {
     const del = {
       id: id,
     };
-    return await axios.post(Common.KH_DOMAIN + "/user/delete", del);
+    return await Interceptor.post(Common.KH_DOMAIN + "/user/delete", del);
   },
   // 게시글 조회
   boardList: async () => {
     const accessToken = Common.getAccessToken();
-    return await axios.get(Common.KH_DOMAIN + "/api/board/list", {
+    return await Interceptor.get(Common.KH_DOMAIN + "/api/board/list", {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -94,12 +94,15 @@ const AxiosApi = {
   // 게시글 상세 조회
   boardDetail: async (boardId) => {
     const accessToken = Common.getAccessToken();
-    return await axios.get(Common.KH_DOMAIN + `/api/board/detail/${boardId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+    return await Interceptor.get(
+      Common.KH_DOMAIN + `/api/board/detail/${boardId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
   },
   // 게시글 쓰기
   boardWrite: async (email, title, categoryId, content, img) => {
@@ -111,7 +114,7 @@ const AxiosApi = {
       content: content,
       img: img,
     };
-    return await axios.post(Common.KH_DOMAIN + "/api/board/new", board, {
+    return await Interceptor.post(Common.KH_DOMAIN + "/api/board/new", board, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -121,12 +124,15 @@ const AxiosApi = {
   // 게시글에 달린 댓글 조회
   commentList: async (boardId) => {
     const accessToken = Common.getAccessToken();
-    return await axios.get(Common.KH_DOMAIN + `/api/comment/list/${boardId}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+    return await Interceptor.get(
+      Common.KH_DOMAIN + `/api/comment/list/${boardId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
   },
   // 댓글 쓰기
   commentWrite: async (email, boardId, content) => {
@@ -136,17 +142,21 @@ const AxiosApi = {
       email: email,
       content: content,
     };
-    return await axios.post(Common.KH_DOMAIN + `/api/comment/new`, comment, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+    return await Interceptor.post(
+      Common.KH_DOMAIN + `/api/comment/new`,
+      comment,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
   },
   // 카테고리 조회
   cateList: async () => {
     const accessToken = Common.getAccessToken();
-    return await axios.get(Common.KH_DOMAIN + `/api/category/list`, {
+    return await Interceptor.get(Common.KH_DOMAIN + `/api/category/list`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -160,17 +170,21 @@ const AxiosApi = {
       email: email,
       categoryName: category,
     };
-    return await axios.post(Common.KH_DOMAIN + "/api/category/new", cate, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
-      },
-    });
+    return await Interceptor.post(
+      Common.KH_DOMAIN + "/api/category/new",
+      cate,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
   },
   // 카테고리 삭제
   cateDelete: async (categoryId) => {
     const accessToken = Common.getAccessToken();
-    return await axios.delete(
+    return await Interceptor.delete(
       Common.KH_DOMAIN + `/api/category/delete/${categoryId}`,
       {
         headers: {
@@ -183,7 +197,7 @@ const AxiosApi = {
   // 카테고리 수정
   cateUpdate: async (todoId) => {
     const accessToken = Common.getAccessToken();
-    return await axios.put(Common.KH_DOMAIN + `/api/todo/${todoId}`, {
+    return await Interceptor.put(Common.KH_DOMAIN + `/api/todo/${todoId}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -192,27 +206,27 @@ const AxiosApi = {
   },
   // 영화 목록 조회
   movieList: async () => {
-    return await axios.get(Common.KH_DOMAIN + "/movies/list");
+    return await Interceptor.get(Common.KH_DOMAIN + "/movies/list");
   },
   // 영화 페이지 수 조회
   moviePage: async (page, size) => {
-    return await axios.get(
+    return await Interceptor.get(
       Common.KH_DOMAIN + `/movies/list/count?page=${page}&size=${size}`
     );
   },
   // 영화 페이지네이션 조회
   moviePageList: async (page, size) => {
-    return await axios.get(
+    return await Interceptor.get(
       Common.KH_DOMAIN + `/movies/list/page?page=${page}&size=${size}`
     );
   },
   movieDeleteAll: async () => {
-    return await axios.delete(Common.KH_DOMAIN + "/movies/delete");
+    return await Interceptor.delete(Common.KH_DOMAIN + "/movies/delete");
   },
   // 채팅방 목록 보기
   chatList: async () => {
     const accessToken = Common.getAccessToken();
-    return await axios.get(Common.KH_DOMAIN + "/chat/list", {
+    return await Interceptor.get(Common.KH_DOMAIN + "/chat/list", {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -222,7 +236,7 @@ const AxiosApi = {
   // 채팅방 정보 보기
   chatDetail: async (roomId) => {
     const accessToken = Common.getAccessToken();
-    return await axios.get(Common.KH_DOMAIN + `/chat/room/${roomId}`, {
+    return await Interceptor.get(Common.KH_DOMAIN + `/chat/room/${roomId}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -236,7 +250,7 @@ const AxiosApi = {
       email: email,
       name: name,
     };
-    return await axios.post(Common.KH_DOMAIN + "/chat/new", chat, {
+    return await Interceptor.post(Common.KH_DOMAIN + "/chat/new", chat, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,
@@ -246,7 +260,7 @@ const AxiosApi = {
   // 이전 채팅 가져오기
   recentChatLoad: async (roomId) => {
     const accessToken = Common.getAccessToken();
-    return await axios.get(Common.KH_DOMAIN + `/chat/message/${roomId}`, {
+    return await Interceptor.get(Common.KH_DOMAIN + `/chat/message/${roomId}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + accessToken,

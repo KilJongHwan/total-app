@@ -5,7 +5,8 @@ const useWeather = () => {
   const [location, setLocation] = useState({ lat: 0, long: 0 }); // 위도, 경도
   const [coords, setCoords] = useState(""); // 기상청 좌표
   const [addr, setAddr] = useState(""); // 주소
-  const [temp, setTemp] = useState(""); // 온도
+  // const [temp, setTemp] = useState(""); // 온도
+  const [temp, setTemp] = useState("");
   const [intervalId, setIntervalId] = useState(null); // 갱신 주기를 관리하기 위한 상태
   const updateInterval = 60000; // 주기적 갱신 간격 (예: 1분)
 
@@ -40,9 +41,13 @@ const useWeather = () => {
           },
         }
       );
-      const fullAddress = response.data.documents[0].address;
-      const neighborhoodAddress = `${fullAddress.region_1depth_name} ${fullAddress.region_2depth_name} ${fullAddress.region_3depth_name}`;
-      setAddr(neighborhoodAddress); // context에 저장
+      const fullAddress = response.data.documents?.[0]?.address;
+      if (fullAddress) {
+        const neighborhoodAddress = `${fullAddress.region_1depth_name} ${fullAddress.region_2depth_name} ${fullAddress.region_3depth_name}`;
+        setAddr(neighborhoodAddress); // context에 저장
+      } else {
+        console.log("주소를 못찾았습니다.");
+      }
     } catch (error) {
       console.error("Kakao Geocoding error:", error);
     }
@@ -148,6 +153,7 @@ const useWeather = () => {
 
   const getWeather = async () => {
     console.log("weather Call", coords.x, coords.y);
+
     try {
       const response = await axios.get(
         `http://127.0.0.1:5000/api/weather2?x=${coords.x}&y=${coords.y}`
