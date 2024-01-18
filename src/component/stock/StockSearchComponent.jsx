@@ -106,7 +106,18 @@ const StockSearchComponent = () => {
         {stockData && (
           <div>
             <h3>Stock Data</h3>
-            <pre>{JSON.stringify(stockData, null, 2)}</pre>
+            {stockData && (
+              <div>
+                {stockData.hits.hits.map((hit, index) => (
+                  <div key={index}>
+                    <p>회사명: {hit._source["회사명"]}</p>
+                    <p>종목코드: {hit._source["종목코드"]}</p>
+                    <p>현재가: {hit._source["현재가"]}</p>
+                    {/* 나머지 필드도 이와 같은 방식으로 출력할 수 있음 */}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </Results>
