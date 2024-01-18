@@ -42,6 +42,9 @@ const Home = () => {
       case 12:
         navigate("/Chat");
         break;
+      case 13:
+        navigate("/Stock");
+        break;
       default:
     }
   };
@@ -62,6 +65,7 @@ const Home = () => {
           <TransBtn onClick={() => onClickBtn(10)}>포지션 이동</TransBtn>
           <TransBtn onClick={() => onClickBtn(11)}>날씨</TransBtn>
           <TransBtn onClick={() => onClickBtn(12)}>채팅</TransBtn>
+          <TransBtn onClick={() => onClickBtn(13)}>주식</TransBtn>
         </ButtonContainer>
       </div>
     </>

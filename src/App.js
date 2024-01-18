@@ -24,6 +24,7 @@ import UserStore from "./context/UserStore";
 import ChatList from "./pages/chatting/ChatList";
 import ChatRoomCreate from "./pages/chatting/ChatRoomCreate";
 import Chatting from "./pages/chatting/Chatting";
+import StockSearchComponent from "./component/stock/StockSearchComponent";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
               <Route path="/Chat" element={<ChatList />} />
               <Route path="/Chat-create" element={<ChatRoomCreate />} />
               <Route path="/Chatting/:roomId" element={<Chatting />} />
+              <Route path="/Stock" element={<StockSearchComponent />} />
             </Route>
           </Routes>
         </Router>

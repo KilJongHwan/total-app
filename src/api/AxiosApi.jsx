@@ -267,5 +267,32 @@ const AxiosApi = {
       },
     });
   },
+  // 주식 데이터 검색
+  stockSearch: async (stockCode) => {
+    const accessToken = Common.getAccessToken();
+    return await Interceptor.get(
+      Common.KH_DOMAIN + `/elastic/stock/search?stockCode=${stockCode}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+  },
+  // 종목명으로 주식 데이터 검색
+  stockSearchByName: async (companyName) => {
+    const accessToken = Common.getAccessToken();
+    return await Interceptor.get(
+      Common.KH_DOMAIN +
+        `/elastic/stock/searchByName?companyName=${companyName}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+  },
 };
 export default AxiosApi;
